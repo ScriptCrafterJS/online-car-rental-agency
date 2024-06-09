@@ -1,6 +1,6 @@
 <?php
 session_start();
-
+require_once('../db.php.inc');
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     //exploiting the ability of the array to have specified indices to act as a map
     $_SESSION['customer'] = [
@@ -35,6 +35,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 </head>
 
 <body>
+    <?php 
+        echo displayHead();
+    ?>
     <h2>Customer Registration</h2>
     <fieldset>
         <legend>Enter Customer Information</legend>
@@ -84,6 +87,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             <button type="submit">Next</button>
         </form>
     </fieldset>
+    <?php 
+        echo displayFooter();
+    ?>
 </body>
 
 </html>

@@ -2,9 +2,7 @@
 session_start();
 require_once('../db.php.inc');
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $username = $_SESSION['customer']['username'];
-    $password = $_SESSION['customer']['password'];
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {;
 
     //connect to the database
     $pdo = db_connect();
@@ -13,24 +11,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $sql = "INSERT INTO users (username, password, isManager) 
     VALUES (:username, :password, 0)";
     $stmt = $pdo->prepare($sql);
-    $stmt->bindParam(':username', $username);
-    $stmt->bindParam(':password', $password);
+    $stmt->bindParam(':username', $_SESSION['customer']['username']);
+    $stmt->bindParam(':password', $_SESSION['customer']['password']);
     $stmt->execute();
-
-
-    $creditCardNumber = $_SESSION['customer']['creditCardNumber'];
-    $creditCardExpiry = $_SESSION['customer']['creditCardExpiry'];
-    $creditCardName = $_SESSION['customer']['creditCardName'];
-    $bankIssued = $_SESSION['customer']['bankIssued'];
-
+    
     //insert the payment information in the payments table
     $sql = "INSERT INTO payments (creditCardNumber, creditCardExpiry, creditCardName, bankIssued) 
     VALUES (:creditCardNumber, :creditCardExpiry, :creditCardName, :bankIssued)";
     $stmt = $pdo->prepare($sql);
-    $stmt->bindParam(':creditCardNumber', $creditCardNumber);
-    $stmt->bindParam(':creditCardExpiry', $creditCardExpiry);
-    $stmt->bindParam(':creditCardName', $creditCardName);
-    $stmt->bindParam(':bankIssued', $bankIssued);
+    $stmt->bindParam(':creditCardNumber', $_SESSION['customer']['creditCardNumber']);
+    $stmt->bindParam(':creditCardExpiry', $_SESSION['customer']['creditCardExpiry']);
+    $stmt->bindParam(':creditCardName', $_SESSION['customer']['creditCardName']);
+    $stmt->bindParam(':bankIssued', $_SESSION['customer']['bankIssued']);
     $stmt->execute();
 
 
@@ -38,26 +30,31 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     //fetch the last added element
     $sql = $pdo->prepare("SELECT * FROM users ORDER BY id DESC LIMIT 1");
     $sql->execute();
-    $lastUser = $sql->fetchObject('User');
+    $lastUser = $sql->fetch();
 
     $sql = $pdo->prepare("SELECT * FROM payments ORDER BY id DESC LIMIT 1");
     $sql->execute();
-    $lastPayment= $sql->fetchObject('User');
-
+    $lastPayment= $sql->fetch();
 
     //insert our new customer into the system
-    $sql = "INSERT INTO users (username, password, isManager) 
-    VALUES (:username, :password, 0)";
+    $sql = "INSERT INTO customers (name, houseNo, flatNo, street, city, country, dateOfBirth,email,telephone,userId, paymentID) 
+    VALUES (:name, :houseNo, :flatNo, :street, :city, :country, :dateOfBirth, :email, :telephone, :userId, :paymentID)";
     $stmt = $pdo->prepare($sql);
-    $stmt->bindParam(':username', $username);
-    $stmt->bindParam(':password', $password);
+    $stmt->bindParam(':name', $_SESSION['customer']['name']);
+    $stmt->bindParam(':houseNo', $_SESSION['customer']['houseNo']);
+    $stmt->bindParam(':flatNo', $_SESSION['customer']['flatNo']);
+    $stmt->bindParam(':street', $_SESSION['customer']['street']);
+    $stmt->bindParam(':city', $_SESSION['customer']['city']);
+    $stmt->bindParam(':country', $_SESSION['customer']['country']);
+    $stmt->bindParam(':dateOfBirth', $_SESSION['customer']['dateOfBirth']);
+    $stmt->bindParam(':email', $_SESSION['customer']['email']);
+    $stmt->bindParam(':telephone', $_SESSION['customer']['telephone']);
+    $stmt->bindParam(':userId', $lastUser['id']);
+    $stmt->bindParam(':paymentID', $lastPayment['id']);
     $stmt->execute();
     
-    echo "Thank You! <br> Your Customer ID is: $customerID <br>";
-    echo "<a href='../login.php'>Login</a>";
+    header('Location: confirmation.php');
     exit();
-
-
 }
 ?>
 
@@ -88,9 +85,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         echo "<p>Telephone: {$customer['telephone']}</p>";
     }
     ?>
-    <form method="post">
+    <form method="post" action="">
         <input type="submit" name="confirm" value="Confirm">
     </form>
+    <?php 
+    echo displayFooter();
+    ?>
 </body>
 
 </html>

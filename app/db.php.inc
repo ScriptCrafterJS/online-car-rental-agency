@@ -28,6 +28,12 @@
             one of the best stores you could ever visit in your entire life<br />no
             need to go to a thousends of stores
             </p>
+            <ul>
+                <li><a href="login.php">Login</a></li>
+                <li><a href="./registration/step1.php">Register</a></li>
+                <li><a href="#">Contact Us</a></li>
+                <li><a href="index.php">Home</a></li>
+            </ul>
             <hr/>
          </header>
     REC;

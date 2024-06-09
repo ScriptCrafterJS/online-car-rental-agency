@@ -1,6 +1,6 @@
 <?php
 session_start();
-
+require_once('../db.php.inc');
 $notMatch = false;
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -34,6 +34,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 </head>
 
 <body>
+    <?php 
+        echo displayHead();
+    ?>
     <h2>Customer Registration</h2>
     <?php
     if ($notMatch) {
@@ -55,6 +58,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             <button type="submit">Next</button>
         </form>
     </fieldset>
+    <?php 
+        echo displayFooter();
+    ?>
 </body>
 
 </html>
