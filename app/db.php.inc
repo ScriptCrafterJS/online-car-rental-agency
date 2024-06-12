@@ -20,7 +20,7 @@
        $headerHTML = <<<REC
         <header>
             <nav>
-            <figure><img src="../../images/logo.png" alt="logo" height="40" width="40" /></figure>
+            <figure><img src="../images/logo.jpg" alt="logo" height="80" width="80" /></figure>
             <span>Shippify</span>
             </nav>
             <h1>Welcome to Shippify</h1>
