@@ -18,11 +18,31 @@ class Car
     private $width;
     private $gearType;
     private $carStatus;
+    private $imageName;
 
     public function __construct($parameters = array()){
         foreach($parameters as $key => $value){
             $this->$key = $value;
         }
+    }
+
+    public function displayInTable(){
+         ;
+        $row = <<<REC
+         <tr>
+
+         <td><input type="checkbox" id="vehicle1" name="vehicle1" value="Bike"></td>
+
+         <td>$this->pricePerDay</td>
+         <td>$this->type</td>
+         <td>$this->fuelType</td>
+         <td><img src="../images/$this->imageName" alt="$this->imageName" width="200" height="100"/></td>
+         <td>
+         <button type="button"><a href='#'>Rent</a></button>
+         </td>
+         </tr>
+    REC;
+        return $row;
     }
     // public function construct(
     //     $carId,
@@ -197,4 +217,5 @@ class Car
     {
         $this->$carStatus = $carStatus;
     }
+    
 }
