@@ -2,7 +2,8 @@
 
 class Location{
      private $id;
-     private $name;
+     private $pickupName;
+     private $returnName;
      private $city;
      private $telephone;
 
@@ -31,12 +32,19 @@ class Location{
         $this->$id = $id;
     }
 
-    public function getName() {
-        return $this->name;
+    public function getPickupName() {
+        return $this->pickupName;
     }
 
-    public function setName($name) {
-        $this->name = $name;
+    public function setPickupName($pickupName) {
+        $this->pickupName = $pickupName;
+    }
+    public function getReturnName() {
+        return $this->returnName;
+    }
+
+    public function setReturnName($returnName) {
+        $this->returnName = $returnName;
     }
 
     public function getCity() {
