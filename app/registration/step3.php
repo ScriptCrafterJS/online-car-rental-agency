@@ -8,51 +8,56 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {;
     $pdo = db_connect();
     
     //insert the user info in the user table
-    $sql = "INSERT INTO users (username, password, isManager) 
+    $sql = "INSERT INTO user (username, password, isManager) 
     VALUES (:username, :password, 0)";
     $stmt = $pdo->prepare($sql);
     $stmt->bindParam(':username', $_SESSION['customer']['username']);
     $stmt->bindParam(':password', $_SESSION['customer']['password']);
     $stmt->execute();
-    
-    //insert the payment information in the payments table
-    $sql = "INSERT INTO payments (creditCardNumber, creditCardExpiry, creditCardName, bankIssued) 
-    VALUES (:creditCardNumber, :creditCardExpiry, :creditCardName, :bankIssued)";
+
+    //retrieve the last user entry and the last payment entry for our new customer
+    //fetch the last added element
+    $sql = $pdo->prepare("SELECT * FROM user ORDER BY id DESC LIMIT 1");
+    $sql->execute();
+    $lastUser = $sql->fetch();
+
+
+     //insert our new customer into the system
+     $sql = "INSERT INTO customer (name, houseNo, flatNo, street, city, country, dateOfBirth,idNumber,email,telephone,userId) 
+     VALUES (:name, :houseNo, :flatNo, :street, :city, :country, :dateOfBirth,:idNumber, :email, :telephone, :userId)";
+     $stmt = $pdo->prepare($sql);
+     $stmt->bindParam(':name', $_SESSION['customer']['name']);
+     $stmt->bindParam(':houseNo', $_SESSION['customer']['houseNo']);
+     $stmt->bindParam(':flatNo', $_SESSION['customer']['flatNo']);
+     $stmt->bindParam(':street', $_SESSION['customer']['street']);
+     $stmt->bindParam(':city', $_SESSION['customer']['city']);
+     $stmt->bindParam(':country', $_SESSION['customer']['country']);
+     $stmt->bindParam(':dateOfBirth', $_SESSION['customer']['dateOfBirth']);
+     $stmt->bindParam(':idNumber', $_SESSION['customer']['idNumber']);
+     $stmt->bindParam(':email', $_SESSION['customer']['email']);
+     $stmt->bindParam(':telephone', $_SESSION['customer']['telephone']);
+     $stmt->bindParam(':userId', $lastUser['id']);
+     $stmt->execute();
+
+    $sql = $pdo->prepare("SELECT * FROM customer ORDER BY id DESC LIMIT 1");
+    $sql->execute();
+    $lastCustomer= $sql->fetch();
+
+
+      //insert the payment information in the payments table
+    $sql = "INSERT INTO payment (creditCardNumber, creditCardExpiry, creditCardName, bankIssued, creditCardType, customerId) 
+    VALUES (:creditCardNumber, :creditCardExpiry, :creditCardName, :bankIssued, :creditCardType,:customerId)";
     $stmt = $pdo->prepare($sql);
     $stmt->bindParam(':creditCardNumber', $_SESSION['customer']['creditCardNumber']);
     $stmt->bindParam(':creditCardExpiry', $_SESSION['customer']['creditCardExpiry']);
     $stmt->bindParam(':creditCardName', $_SESSION['customer']['creditCardName']);
     $stmt->bindParam(':bankIssued', $_SESSION['customer']['bankIssued']);
+    $stmt->bindParam(':creditCardType', $_SESSION['customer']['creditCardType']);
+    $stmt->bindParam(':customerId', $lastCustomer['id']);
     $stmt->execute();
 
+    $_SESSION['customer']['id'] = $lastCustomer['id'];
 
-    //retrieve the last user entry and the last payment entry for our new customer
-    //fetch the last added element
-    $sql = $pdo->prepare("SELECT * FROM users ORDER BY id DESC LIMIT 1");
-    $sql->execute();
-    $lastUser = $sql->fetch();
-
-    $sql = $pdo->prepare("SELECT * FROM payments ORDER BY id DESC LIMIT 1");
-    $sql->execute();
-    $lastPayment= $sql->fetch();
-
-    //insert our new customer into the system
-    $sql = "INSERT INTO customers (name, houseNo, flatNo, street, city, country, dateOfBirth,email,telephone,userId, paymentID) 
-    VALUES (:name, :houseNo, :flatNo, :street, :city, :country, :dateOfBirth, :email, :telephone, :userId, :paymentID)";
-    $stmt = $pdo->prepare($sql);
-    $stmt->bindParam(':name', $_SESSION['customer']['name']);
-    $stmt->bindParam(':houseNo', $_SESSION['customer']['houseNo']);
-    $stmt->bindParam(':flatNo', $_SESSION['customer']['flatNo']);
-    $stmt->bindParam(':street', $_SESSION['customer']['street']);
-    $stmt->bindParam(':city', $_SESSION['customer']['city']);
-    $stmt->bindParam(':country', $_SESSION['customer']['country']);
-    $stmt->bindParam(':dateOfBirth', $_SESSION['customer']['dateOfBirth']);
-    $stmt->bindParam(':email', $_SESSION['customer']['email']);
-    $stmt->bindParam(':telephone', $_SESSION['customer']['telephone']);
-    $stmt->bindParam(':userId', $lastUser['id']);
-    $stmt->bindParam(':paymentID', $lastPayment['id']);
-    $stmt->execute();
-    
     header('Location: confirmation.php');
     exit();
 }

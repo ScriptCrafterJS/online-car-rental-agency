@@ -5,7 +5,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
      //connect to the database
      $pdo = db_connect();
 
-     $sql = $pdo->prepare("SELECT * FROM users WHERE password = :password AND username = :username");
+     $sql = $pdo->prepare("SELECT * FROM user WHERE password = :password AND username = :username");
      $sql->bindParam(':password', $_POST['password']);
      $sql->bindParam(':username', $_POST['username']);
      $sql->execute();
@@ -14,11 +14,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if($user){
         if($user['isManager']){
             //go to the manager page
-            header('Location: manager.php');
+            header('Location: car_inquire.php');
             exit();
         }else{
             //go to the customer page
-            header('Location: customer.php');
+            header('Location: home.php');
             exit();
         }
     }

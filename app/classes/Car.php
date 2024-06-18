@@ -17,70 +17,49 @@ class Car
     private $length;
     private $width;
     private $gearType;
-    private $carStatus;
-    private $imageName;
+    private $status;
+    private $photoName;
 
-    public function __construct($parameters = array()){
-        foreach($parameters as $key => $value){
+    public function __construct($parameters = array())
+    {
+        foreach ($parameters as $key => $value) {
             $this->$key = $value;
         }
     }
 
-    public function displayInTable(){
-         ;
+    public function displayInTable()
+    {;
         $row = <<<REC
          <tr>
 
-         <td><input type="checkbox" id="vehicle1" name="vehicle1" value="Bike"></td>
-
+         <td><input type="checkbox" value="$this->id" name="chosen_cars[]"></td>
          <td>$this->pricePerDay</td>
          <td>$this->type</td>
          <td>$this->fuelType</td>
-         <td><img src="../images/$this->imageName" alt="$this->imageName" width="200" height="100"/></td>
+         <td><img src="../images/$this->photoName" alt="$this->photoName" width="200" height="100"/></td>
          <td>
-         <button type="button"><a href='#'>Rent</a></button>
+         <button type="button"><a href='car_details.php?carID=$this->id'>Rent</a></button>
          </td>
          </tr>
     REC;
         return $row;
     }
-    // public function construct(
-    //     $carId,
-    //     $model,
-    //     $make,
-    //     $type,
-    //     $registrationYear,
-    //     $description,
-    //     $pricePerDay,
-    //     $peopleCapacity,
-    //     $suitcasesCapacity,
-    //     $color,
-    //     $fuelType,
-    //     $avgConsumption,
-    //     $horsePower,
-    //     $length,
-    //     $width,
-    //     $gearType,
-    //     $carStatus,
-    // ) {
-    //     $this->carId = $carId;
-    //     $this->model = $model;
-    //     $this->make = $make;
-    //     $this->type = $type;
-    //     $this->registrationYear = $registrationYear;
-    //     $this->description = $description;
-    //     $this->pricePerDay = $pricePerDay;
-    //     $this->peopleCapacity = $peopleCapacity;
-    //     $this->suitcasesCapacity = $suitcasesCapacity;
-    //     $this->color = $color;
-    //     $this->fuelType = $fuelType;
-    //     $this->avgConsumption = $avgConsumption;
-    //     $this->horsePower = $horsePower;
-    //     $this->length = $length;
-    //     $this->width = $width;
-    //     $this->gearType = $gearType;
-    //     $this->carStatus = $carStatus;
-    // }
+
+    public function managerDisplayInTable()
+    {
+        $row = <<<REC
+         <tr>
+         <td>$this->id</td>
+         <td>$this->type</td>
+         <td>$this->model</td>
+         <td>$this->description</td>
+         <td><img src="../images/$this->photoName" alt="$this->photoName" width="200" height="100"/></td>
+         <td>$this->fuelType</td>
+         <td>$this->status</td>
+         </tr>
+    REC;
+        return $row;
+    }
     public function getCarId()
     {
         return $this->id;
@@ -147,7 +126,7 @@ class Car
     }
     public function getCarStatus()
     {
-        return $this->carStatus;
+        return $this->status;
     }
     public function setCarId($id)
     {
@@ -213,9 +192,8 @@ class Car
     {
         $this->$gearType = $gearType;
     }
-    public function setCarStatus($carStatus)
+    public function setCarStatus($status)
     {
-        $this->$carStatus = $carStatus;
+        $this->$status = $status;
     }
-    
 }

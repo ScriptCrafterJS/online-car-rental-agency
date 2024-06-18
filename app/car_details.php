@@ -8,15 +8,13 @@ $car = null;
 if (isset($_GET['carID'])) {
     $carId = $_GET['carID'];
     
-    $sql = "SELECT * FROM cars WHERE id = :carId";
+    $sql = "SELECT * FROM car WHERE id = :carId";
     $stmt = $pdo->prepare($sql);
     $stmt->bindParam(':carId', $carId);
     $stmt->execute();
     
     $car = $stmt->fetch(PDO::FETCH_ASSOC);  
-    $_SESSION['rented_car'] = [
-        'id' => $car['id']
-    ];
+    $_SESSION['rented_car'] = ['id' => $car['id']];
 }
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -42,7 +40,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             <legend>Car Details</legend>
             <form action="<?php echo $_SERVER["PHP_SELF"] ?>" method="POST">
                 <div>
-                    <img src="../images/<?php echo $car['imageName'] ?>" alt="<?php echo $car['imageName'] ?>"
+                    <img src="../images/<?php echo $car['photoName'] ?>" alt="<?php echo $car['photoName'] ?>"
                         width="300">
                     <?php echo $car['description']; ?>
                 </div>
